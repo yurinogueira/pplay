@@ -34,7 +34,7 @@ jobs:
         run: python setup.py sdist bdist_wheel
 
       - name: Publish package
-        run: twine upload -u $TWINE_USERNAME -p $TWINE_PASSWORD dist/*
+        run: twine upload -u __token__ -p $TWINE_PASSWORD dist/*
         env:
           TWINE_USERNAME: pplay-pygame
           TWINE_PASSWORD: ${{ secrets.PPLAY_PYGAME_API_TOKEN }}
