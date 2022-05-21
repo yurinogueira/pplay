@@ -36,5 +36,4 @@ jobs:
       - name: Publish package
         run: twine upload -u __token__ -p $TWINE_PASSWORD dist/*
         env:
-          TWINE_USERNAME: pplay-pygame
           TWINE_PASSWORD: ${{ secrets.PPLAY_PYGAME_API_TOKEN }}
