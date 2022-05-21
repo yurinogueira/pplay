@@ -4,7 +4,7 @@ import pygame
 pygame.init()
 
 
-class CenterText:
+class Text:
     def __init__(
         self, x, y, text="", color=(255, 255, 255), size=64, font="Arial"
     ):
