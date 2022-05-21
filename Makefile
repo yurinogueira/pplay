@@ -13,3 +13,6 @@ build:
 
 requirements:
 	docker compose run --rm server python -m pip install --upgrade pip && pip install -r requirements.txt
+
+docker-rebuild:
+	docker compose build --force-rm --no-cache --pull

@@ -2,7 +2,10 @@ version: "3"
 
 services:
   server:
-    image: "python:bullseye"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: "pplay-pygame:latest"
     restart: "unless-stopped"
     stop_grace_period: "5s"
     working_dir: "/usr/src/app"
