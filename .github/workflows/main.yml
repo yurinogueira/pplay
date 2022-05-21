@@ -37,3 +37,15 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: isort
+        working-directory: ./src
+        run: isort --diff --check-only .
+
+      - name: black
+        working-directory: ./src
+        run: black --check .
+
+      - name: mypy
+        working-directory: ./src
+        run: mypy . --exclude migrations
