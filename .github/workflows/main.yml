@@ -7,7 +7,6 @@ on:
       - "dependabot/**"
       - "refactor/**"
       - "feature/**"
-      - "bugfix/**"
       - "hotfix/**"
       - "chore/**"
       - "style/**"
