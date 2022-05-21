@@ -32,9 +32,6 @@ _isort:
 _isort_fix:
 	docker-compose run --rm --no-deps server isort .
 
-_mypy:
-	docker-compose run --rm --no-deps server mypy . --exclude migrations
-
-lint: _isort _black _mypy
+lint: _isort _black
 
 format-code: _isort_fix _black_fix
