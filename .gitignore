@@ -1,0 +1,9 @@
+# Requirements
+/src/setup.py
+/src/requirements.txt
+
+# Build
+/pplay_pygame.egg-info/
+/dist/
+/build/
+/.eggs/

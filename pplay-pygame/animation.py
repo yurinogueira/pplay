@@ -1,7 +1,6 @@
 # coding= utf-8
 
 # Pygame and System Modules
-import sys
 import time
 import pygame
 from . import window

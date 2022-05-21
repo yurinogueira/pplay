@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  server:
+    image: "python:bullseye"
+    restart: "unless-stopped"
+    stop_grace_period: "5s"
+    working_dir: "/usr/src/app"
+    volumes:
+      - ./:/usr/src/app
+    container_name: pplay-pygame-server
