@@ -1,4 +1,4 @@
-name: Code Quality and Deploy
+name: Code Quality and Test
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
 
 jobs:
   code-quality:
-    name: Code Quality and Deploy
+    name: Code Quality and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +37,3 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Publish package
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: pplay-pygame
-          password: ${{ secrets.PPLAY_PYGAME_API_TOKEN }}
