@@ -3,12 +3,13 @@
 # Pygame and system modules
 import sys
 
-from exceptions import WindowNotInitialized
-from keyboard import Keyboard
-from mouse import Mouse
 import pygame
 from pygame.locals import *
-from sound import SoundMixer
+
+from pplay.exceptions import WindowNotInitialized
+from pplay.keyboard import Keyboard
+from pplay.mouse import Mouse
+from pplay.sound import SoundMixer
 
 # Initializes pygame's modules
 pygame.init()

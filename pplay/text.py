@@ -1,5 +1,6 @@
 import pygame
-from window import Window
+
+from pplay.window import Window
 
 # Initializes pygame's modules
 pygame.init()

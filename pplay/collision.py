@@ -1,9 +1,10 @@
 # coding= utf-8
 
 # Modules import
-from baseobject import BaseObject, BaseRectObject
-from point import Point
 import pygame
+
+from pplay.baseobject import BaseObject, BaseRectObject
+from pplay.point import Point
 
 # -*- coding: utf-8 -*-
 

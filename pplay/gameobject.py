@@ -2,9 +2,9 @@
 
 """The most basic game class"""
 
-from baseobject import BaseObject
-from collision import Collision
-from sound import Sound
+from pplay.baseobject import BaseObject
+from pplay.collision import Collision
+from pplay.sound import Sound
 
 
 class GameObject(BaseObject):

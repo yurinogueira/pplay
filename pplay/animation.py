@@ -5,8 +5,8 @@ import time
 
 from gameimage import GameImage
 import pygame
-from pygame.locals import *
-from window import Window
+
+from pplay.window import Window
 
 # Initializes pygame's modules
 pygame.init()

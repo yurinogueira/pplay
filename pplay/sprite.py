@@ -1,9 +1,10 @@
 # coding= utf-8
 
 # Modules
-from animation import Animation
 import pygame
-from window import Window
+
+from pplay.animation import Animation
+from pplay.window import Window
 
 # Initializes pygame's modules
 pygame.init()

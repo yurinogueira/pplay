@@ -1,9 +1,10 @@
 # Pygame and system modules
-from collision import Collision
-from gameobject import GameObject
 import pygame
 from pygame.locals import *
-from window import Window
+
+from pplay.collision import Collision
+from pplay.gameobject import GameObject
+from pplay.window import Window
 
 # Initializes pygame's modules
 pygame.init()
