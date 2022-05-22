@@ -43,33 +43,44 @@ class SoundMixer:
         kwargs = {"loops": -1} if loop else {}
 
         if know_position != -1:
-            cls.set_volume(rnd_code, volume, know_position)
-            cls.positions[know_position] = rnd_code
             channel = pygame.mixer.Channel(know_position)
             channel.play(sound, **kwargs)
+            cls.set_volume(rnd_code, volume, know_position)
+            cls.positions[know_position] = rnd_code
             return
 
         for i in range(cls.max_channels):
-            channel = pygame.mixer.Channel(i)
-            if cls.positions[i] == rnd_code or not channel.get_busy():
-                cls.positions[i] = rnd_code
-                cls.set_volume(rnd_code, volume, i)
+            if cls.positions[i] == rnd_code:
+                channel = pygame.mixer.Channel(i)
+                if not not channel.get_busy():
+                    return
+
                 channel.play(sound, **kwargs)
+                cls.set_volume(rnd_code, volume, i)
+                cls.positions[i] = rnd_code
+                return
+
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if not channel.get_busy():
+                channel.play(sound, **kwargs)
+                cls.set_volume(rnd_code, volume, i)
+                cls.positions[i] = rnd_code
                 return
 
     @classmethod
     def stop_sound(cls, rnd_code, know_position):
         if know_position != -1:
-            cls.positions[know_position] = 0
             channel = pygame.mixer.Channel(know_position)
             channel.stop()
+            cls.positions[know_position] = 0
             return
 
         for i in range(cls.max_channels):
             if cls.positions[i] == rnd_code:
-                cls.positions[i] = 0
                 channel = pygame.mixer.Channel(i)
                 channel.stop()
+                cls.positions[i] = 0
                 return
 
     @classmethod
