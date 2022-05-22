@@ -15,6 +15,7 @@ class SoundMixer:
 
     def __init__(self, channels):
         seed(channels)
+        pygame.mixer.set_num_channels(channels)
         pygame.mixer.init(channels=channels)
 
         SoundMixer.channels = [

@@ -27,7 +27,7 @@ class Window:
 
     """Initialize a Window (width x height)"""
 
-    def __init__(self, width, height, sound_channels=16):
+    def __init__(self, width, height, sound_channels=8):
         # Controllers
         Window.sound_mixer = SoundMixer(sound_channels)
         Window.keyboard = Keyboard()
