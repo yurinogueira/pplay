@@ -2,36 +2,36 @@
 PPlay
 =====
 
-Framework para cria&#231;&#227;o de jogos em Python utilizado pelos alunos de Ci&#234;ncia da Computação da Universidade Federal Fluminense.
+Abstraction framework for creating games in Python, built on pygame, used by Computer Science students at Universidade Federal Fluminense.
 
-Mais informa&#231;&#245;es e documenta&#231;&#227;o detalhada no site do projeto:
-.. pplay: https://www2.ic.uff.br/pplay/
+More information and detailed documentation on the project website:
+https://www2.ic.uff.br/pplay/
 
 
-Instala&#231;&#227;o
+Installation
 ------------
 
 ::
 
    pip install pplay-pygame
 
-Cr&#233;ditos
+Credits
 -------
 
 
 * Prof. Esteban Clua
 * Prof. Anselmo Montenegro
 * Gabriel Saldanha
-* Ad&#244;nis Gasiglia
+* Adonis Gasiglia
 * Yuri Nogueira
 
 
-Depend&#234;ncias
+Dependencies
 ------------
 
-PPlay obviamente depende do Python e do pygame e todas as depend&#234;ncias dos mesmos.
+PPlay obviously depends on Python and pygame and all their dependencies.
 
-Depend&#234;ncias:
+Dependencies:
 
 * Python >= 3.7
 * pygame >= 2.1.2
