@@ -36,5 +36,5 @@ use_parentheses = true
 python_files = "test*.py"
 norecursedirs = ".* build dist CVS _darcs {arch} *.egg *.egg-info venv docs .git appdir .tox .github"
 console_output_style = "progress"
-testpaths = ["pplay-pygame"]
+testpaths = ["pplay"]
 addopts = "--numprocesses=auto --ds=api.settings --durations=5 --cov-report=term-missing --cov=."
