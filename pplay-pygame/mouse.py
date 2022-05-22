@@ -1,9 +1,7 @@
 # coding= utf-8
 
+from point import Point
 import pygame
-from pygame.locals import *
-
-from .point import *
 
 # -*- coding: utf-8 -*-
 
@@ -41,7 +39,6 @@ class Mouse:
 
     def unhide(self):
         pygame.mouse.set_visible(True)
-        self.visibility = True
 
     """Return if the mouse is currently visible or not."""
 

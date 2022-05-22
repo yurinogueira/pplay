@@ -1,11 +1,13 @@
 # Pygame and system modules
+from collision import Collision
+from gameobject import GameObject
 import pygame
 from pygame.locals import *
-
-from . import gameobject, window
+from window import Window
 
 # Initializes pygame's modules
 pygame.init()
+
 
 # Loads an image (with colorkey and alpha)
 def load_image(name, colorkey=None, alpha=False):
@@ -25,15 +27,14 @@ def load_image(name, colorkey=None, alpha=False):
 """GameImage is the base class to deal with images"""
 
 
-class GameImage(gameobject.GameObject):
+class GameImage(GameObject):
     """
     Creates a GameImage from the specified file.
     The width and height are obtained based on the image file.
     """
 
     def __init__(self, image_file):
-        # Parent constructor must be called first
-        gameobject.GameObject.__init__(self)
+        super(GameImage, self).__init__()
 
         # Loads image from the source, converts to fast-blitting format
         self.image = pygame.image.load(image_file).convert_alpha()
@@ -51,7 +52,7 @@ class GameImage(gameobject.GameObject):
         # Window object must've been instatiated
         # draw_rect is necessary to readjust the image position given .x and .y
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        window.Window.get_screen().blit(self.image, self.rect)
+        Window.get_screen().blit(self.image, self.rect)
 
     """Sets the (X,Y) image position on the screen"""
 
@@ -62,7 +63,4 @@ class GameImage(gameobject.GameObject):
     """Checks collision with hitmask"""
 
     def collided_perfect(self, target):
-        # Module import
-        from . import collision
-
-        return collision.Collision.collided_perfect(self, target)
+        return Collision.collided_perfect(self, target)

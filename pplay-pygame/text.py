@@ -1,4 +1,5 @@
 import pygame
+from window import Window
 
 # Initializes pygame's modules
 pygame.init()
@@ -8,7 +9,6 @@ class Text:
     def __init__(
         self, x, y, text="", color=(255, 255, 255), size=64, font="Arial"
     ):
-        self.screen = pygame.display.get_surface()
         self.x = x
         self.y = y
         self.color = color
@@ -22,7 +22,7 @@ class Text:
         self.text_rect = self.text.get_rect(center=(self.x, self.y))
 
     def draw(self):
-        self.screen.blit(self.text, self.text_rect)
+        Window.screen.blit(self.text, self.text_rect)
 
     def update_position(self, x, y):
         self.__update(x=x, y=y)

@@ -3,10 +3,10 @@
 # Pygame and System Modules
 import time
 
+from gameimage import GameImage
 import pygame
 from pygame.locals import *
-
-from . import gameimage, window
+from window import Window
 
 # Initializes pygame's modules
 pygame.init()
@@ -14,7 +14,7 @@ pygame.init()
 """An Animation class for frame-control."""
 
 
-class Animation(gameimage.GameImage):
+class Animation(GameImage):
     """
     Creates an Animation that is composed by N frames.
     The method set_sequence_time must be called right after.
@@ -25,7 +25,7 @@ class Animation(gameimage.GameImage):
 
     def __init__(self, image_file, total_frames, loop=True):
         # Parent's constructor must be first-called
-        gameimage.GameImage.__init__(self, image_file)
+        super(Animation, self).__init__(image_file)
 
         # A Cast to force it to be a float division
         self.width = self.width / float(
@@ -48,7 +48,7 @@ class Animation(gameimage.GameImage):
         self.total_duration = 0
 
         # The actual time in ms
-        self.last_time = int(round(time.time() * 1000))
+        self.last_time = int(time.time() * 1000)
 
         self.set_sequence(0, self.total_frames, self.loop)
 
@@ -87,40 +87,41 @@ class Animation(gameimage.GameImage):
     """Method responsible for performing the change of frames."""
 
     def update(self):
-        if self.playing:
-            time_ms = int(
-                round(time.time() * 1000)
-            )  # gets the curr time in ms
-            if (
-                time_ms - self.last_time > self.frame_duration[self.curr_frame]
-            ) and (self.final_frame != 0):
-                self.curr_frame += 1
-                self.last_time = time_ms
-            if (self.curr_frame == self.final_frame) and (self.loop):
-                self.curr_frame = self.initial_frame
-            else:
-                if (not self.loop) and (
-                    self.curr_frame + 1 >= self.final_frame
-                ):
-                    self.curr_frame = self.final_frame - 1
-                    self.playing = False
+        if not self.playing:
+            return
+
+        time_ms = int(time.time() * 1000)
+        frame_duration = self.frame_duration[self.curr_frame]
+        time_life = time_ms - self.last_time
+
+        if time_life > frame_duration and self.final_frame != 0:
+            self.curr_frame += 1
+            self.last_time = time_ms
+
+        if self.curr_frame == self.final_frame and self.loop:
+            self.curr_frame = self.initial_frame
+            return
+
+        if not self.loop and (self.curr_frame + 1) >= self.final_frame:
+            self.curr_frame = self.final_frame - 1
+            self.playing = False
 
     """Draws the current frame on the screen."""
 
     def draw(self):
-        if self.drawable:
-            # Clips the frame (rect on the image)
-            clip_rect = pygame.Rect(
-                self.curr_frame * self.width, 0, self.width, self.height
-            )
+        if not self.drawable:
+            return
 
-            # Updates the pygame rect based on new positions values
-            self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        # Clips the frame (rect on the image)
+        clip_rect = pygame.Rect(
+            self.curr_frame * self.width, 0, self.width, self.height
+        )
 
-            # Blits the image with the rect and clip_rect clipped
-            window.Window.get_screen().blit(
-                self.image, self.rect, area=clip_rect
-            )
+        # Updates the pygame rect based on new positions values
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+        # Blits the image with the rect and clip_rect clipped
+        Window.get_screen().blit(self.image, self.rect, area=clip_rect)
 
     # ----------------------PLAYING CONTROL METHODS----------------------
     """Stops execution and puts the initial frame as the current frame."""

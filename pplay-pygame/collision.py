@@ -1,9 +1,9 @@
 # coding= utf-8
 
 # Modules import
+from baseobject import BaseObject, BaseRectObject
+from point import Point
 import pygame
-
-from . import point
 
 # -*- coding: utf-8 -*-
 
@@ -30,53 +30,40 @@ class Collision:
         return True
 
     """
-    args[0]: the origin GameObject
-    args[1]: the target GameObject
+    args[0]: the origin Point
+    args[1]: the target Point
     """
 
     @classmethod
-    def collided(cls, *args):
-        """
-        if(len(args) == 2
-        and isinstance(args[0], GameObject)
-        and isinstance(args[1], GameObject)):
-        """
-        game_object1_min = point.Point(args[0].x, args[0].y)
-        game_object1_max = point.Point(
-            args[0].x + args[0].width, args[0].y + args[0].height
-        )
+    def collided(cls, obj: BaseObject, target: BaseObject):
+        obj_min = Point(obj.x, obj.y)
+        obj_max = Point(obj.x + obj.width, obj.y + obj.height)
 
-        game_object2_min = point.Point(args[1].x, args[1].y)
-        game_object2_max = point.Point(
-            args[1].x + args[1].width, args[1].y + args[1].height
-        )
+        target_min = Point(target.x, target.y)
+        target_max = Point(target.x + target.width, target.y + target.height)
 
-        return Collision.collided_rect(
-            game_object1_min,
-            game_object1_max,
-            game_object2_min,
-            game_object2_max,
-        )
+        return cls.collided_rect(obj_min, obj_max, target_min, target_max)
 
     """
     Perfect-pixel collision using masks.
     """
 
     @classmethod
-    def perfect_collision(cls, gameimage1, gameimage2):
+    def perfect_collision(cls, obj: BaseRectObject, target: BaseRectObject):
         """
-        Both objects must extend a GameImage,
+        Both objects must extend a BaseRectObject,
         since it has the pygame.mask and pygame.Rect
         """
-        offset_x = gameimage2.rect.left - gameimage1.rect.left
-        offset_y = gameimage2.rect.top - gameimage1.rect.top
+        if not obj.rect or not target.rect:
+            return False
 
-        mask_1 = pygame.mask.from_surface(gameimage1.image)
-        mask_2 = pygame.mask.from_surface(gameimage2.image)
+        offset_x = target.rect.left - obj.rect.left
+        offset_y = target.rect.top - obj.rect.top
 
-        if mask_1.overlap(mask_2, (offset_x, offset_y)) != None:
-            return True
-        return False
+        mask_1 = pygame.mask.from_surface(obj.image)
+        mask_2 = pygame.mask.from_surface(target.image)
+
+        return not not mask_1.overlap(mask_2, (offset_x, offset_y))
 
     """
     Perfect collision aux - is called by GameImage

@@ -3,10 +3,12 @@
 # Pygame and system modules
 import sys
 
+from exceptions.window_exceptions import WindowNotInitialized
+from keyboard import Keyboard
+from mouse import Mouse
 import pygame
 from pygame.locals import *
-
-from . import keyboard, mouse
+from sound import SoundMixer
 
 # Initializes pygame's modules
 pygame.init()
@@ -17,14 +19,25 @@ All the other game's renderable objects will be drawn on it. """
 
 class Window:
     # A class attribute in Python, this case is similar to Java statics
+    sound_mixer = None
     screen = None
+    keyboard = None
+    mouse = None
 
     """Initialize a Window (width x height)"""
 
-    def __init__(self, width, height):
-        # Input controllers
-        Window.keyboard = keyboard.Keyboard()
-        Window.mouse = mouse.Mouse()
+    def __init__(self, width, height, sound_channels=16):
+        # Controllers
+        Window.sound_mixer = SoundMixer(sound_channels)
+        Window.keyboard = Keyboard()
+        Window.mouse = Mouse()
+
+        # Fullscreen
+        self.fullscreen = False
+        self.fullscreen_width = pygame.display.Info().current_w
+        self.fullscreen_height = pygame.display.Info().current_h
+        self.windowed_width = width
+        self.windowed_height = height
 
         # Size
         self.width = width
@@ -44,7 +57,7 @@ class Window:
         # Creates the screen (pygame.Surface)
         # There are some useful flags (look pygame's docs)
         # It's like a static attribute in Java
-        Window.screen = pygame.display.set_mode([self.width, self.height])
+        Window.screen = pygame.display.set_mode((self.width, self.height))
         # ? Why is it possible to do w.screen?
 
         # Sets pattern starting conditions
@@ -55,28 +68,45 @@ class Window:
         # Can be used to update portions of the screen (Rect list)
         pygame.display.update()
 
-    # ------------------------TODO - VIDEO RESIZE METHODS----------------------
-    """Not implemented yet - Sets the Window to Fullscreen"""
-    # Unfortunately, it must save the old screen (buffer) and
-    # blit (transfer, see pygame doc) to the new FSCREEN
     def set_fullscreen(self):
-        pass
+        if self.fullscreen:
+            return False
 
-    # TODO
+        self.fullscreen = True
+        self.width = self.fullscreen_width
+        self.height = self.fullscreen_height
+        self.screen = pygame.display.set_mode(
+            (self.width, self.height), pygame.FULLSCREEN
+        )
+        self.update()
 
-    """Not implemented yet - Disable the full display mode"""
-    # Yeah.. guess what..
-    def restoreScreen(self):
-        pass
+        return True
 
-    # TODO
+    def set_windowed(self):
+        if not self.fullscreen:
+            return False
 
-    """Not implemented yet - Sets the Window resolution"""
-    # The same problem as fullscreen
+        self.fullscreen = False
+        self.width = self.windowed_width
+        self.height = self.windowed_height
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.update()
+
+        return True
+
     def set_resolution(self, width, height):
-        pass
+        self.windowed_width = width
+        self.windowed_height = height
 
-    # TODO
+        if self.fullscreen:
+            return
+
+        self.width = self.windowed_width
+        self.height = self.windowed_height
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.update()
+
+        return
 
     # -----------------------CONTROL METHODS---------------------------
     """Refreshes the Window - makes changes visible, AND updates the Time"""
@@ -101,14 +131,6 @@ class Window:
         self.set_background_color([255, 255, 255])
         self.update()
 
-    """
-    Closes the Window and stops the program - throws an exception
-    """
-
-    def close(self):
-        pygame.quit()
-        sys.exit()
-
     # ---------------------GETTERS AND SETTERS METHODS-----------------
     """
     Changes background color - receives a vector [R, G, B] value
@@ -116,8 +138,8 @@ class Window:
     or set_background_color([255,255,255]) -> white
     """
 
-    def set_background_color(self, RGB):
-        self.color = RGB
+    def set_background_color(self, rgb):
+        self.color = rgb
         Window.screen.fill(self.color)
 
     # !Implement later possible strings values, such as:
@@ -141,12 +163,6 @@ class Window:
 
     # ----------------------TIME CONTROL METHODS--------------------------
 
-    """Pause the program for an amount of time - milliseconds"""
-    # Uses the processor to make delay accurate instead of
-    # pygame.time.wait that SLEEPS the proccess
-    def delay(self, time_ms):
-        pygame.time.delay(time_ms)
-
     """
     Returns the time passed between
     the last and the current frame - SECONDS
@@ -160,55 +176,44 @@ class Window:
     def time_elapsed(self):
         return self.total_time
 
-    # ------------------------DRAW METHODS-------------------------------
-    """
-    Draw a text on the screen at X and Y co-ords, using [R, G, B] color
-    [with the specified font,
-           [with the specified size,
-                   [Bold,
-                         [Italic]]]]
-    """
-
-    def draw_text(
-        self,
-        text,
-        x,
-        y,
-        size=12,
-        color=(0, 0, 0),
-        font_name="Arial",
-        bold=False,
-        italic=False,
-    ):
-        # Creates a Font from the system fonts
-        # SysFont(name, size, bold=False, italic=False) -> Font
-        font = pygame.font.SysFont(font_name, size, bold, italic)
-
-        # Creates a pygame.Surface with the text rendered on it
-        # render(text, antialias, color, background=None)->Surface
-        font_surface = font.render(text, True, color)
-        # That's because pygame does NOT provide a way
-        # to directly draw text on an existing Surface.
-        # So you must use Font.render() -> Surface and BLIT
-
-        # Finally! BLIT!
-        self.screen.blit(font_surface, [x, y])
-
     # ---------------------CLASS METHODS--------------------------
-    """Returns the drawing surface"""
+    """
+    Closes the Window and stops the program - throws an exception
+    """
+
+    @classmethod
+    def close(cls):
+        pygame.quit()
+        sys.exit()
+
+    """Pause the program for an amount of time - milliseconds"""
+    # Uses the processor to make delay accurate instead of
+    # pygame.time.wait that SLEEPS the proccess
+    @classmethod
+    def delay(cls, time_ms):
+        pygame.time.delay(time_ms)
 
     @classmethod
     def get_screen(cls):
-        return cls.screen
+        if cls.screen:
+            return cls.screen
+
+        raise WindowNotInitialized("screen")
 
     """Returns the keyboard input"""
 
     @classmethod
     def get_keyboard(cls):
-        return cls.keyboard
+        if cls.keyboard:
+            return cls.keyboard
+
+        raise WindowNotInitialized("keyboard")
 
     """Returns the mouse input"""
 
     @classmethod
     def get_mouse(cls):
-        return cls.mouse
+        if cls.mouse:
+            return cls.mouse
+
+        raise WindowNotInitialized("mouse")
