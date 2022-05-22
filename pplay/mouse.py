@@ -2,6 +2,13 @@
 
 import pygame
 
+from pplay.constants import (
+    BUTTON_LEFT,
+    BUTTON_MIDDLE,
+    BUTTON_RIGHT,
+    WHEEL_DOWN,
+    WHEEL_UP,
+)
 from pplay.point import Point
 
 # -*- coding: utf-8 -*-
@@ -12,11 +19,11 @@ pygame.init()
 
 class Mouse:
     def __init__(self):
-        self.BUTTON_LEFT = 1
-        self.BUTTON_MIDDLE = 2
-        self.BUTTON_RIGHT = 3
-        self.WHEEL_UP = 4
-        self.WHEEL_DOWN = 5
+        self.BUTTON_LEFT = BUTTON_LEFT
+        self.BUTTON_MIDDLE = BUTTON_MIDDLE
+        self.BUTTON_RIGHT = BUTTON_RIGHT
+        self.WHEEL_UP = WHEEL_UP
+        self.WHEEL_DOWN = WHEEL_DOWN
 
         self.visibility = True
 

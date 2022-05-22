@@ -10,7 +10,7 @@ pygame.init()
 
 
 class SoundMixer:
-    channels: List[pygame.mixer.Channel] = []
+    max_channels = 0
     positions: List[int] = []
 
     def __init__(self, channels):
@@ -18,9 +18,7 @@ class SoundMixer:
         pygame.mixer.set_num_channels(channels)
         pygame.mixer.init(channels=channels)
 
-        SoundMixer.channels = [
-            pygame.mixer.Channel(i) for i in range(channels)
-        ]
+        SoundMixer.max_channels = channels
         SoundMixer.positions = [0 for _ in range(channels)]
 
     @classmethod
@@ -28,67 +26,78 @@ class SoundMixer:
         kwargs = {"loops": -1} if loop else {}
 
         if know_position != -1:
+            channel = pygame.mixer.Channel(know_position)
+            channel.play(sound, **kwargs)
+            cls.set_volume(rnd_code, volume, know_position)
             cls.positions[know_position] = rnd_code
-            cls.channels[know_position].play(sound, **kwargs)
-            SoundMixer.set_volume(rnd_code, volume, know_position)
             return
 
-        for position, channel in enumerate(cls.channels):
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
             if not channel.get_busy():
                 channel.play(sound, **kwargs)
-                cls.positions[position] = rnd_code
-                SoundMixer.set_volume(rnd_code, volume, position)
+                cls.positions[i] = rnd_code
+                cls.set_volume(rnd_code, volume, i)
 
     @classmethod
     def stop_sound(cls, rnd_code, know_position):
         if know_position != -1:
             cls.positions[know_position] = 0
-            cls.channels[know_position].stop()
+            channel = pygame.mixer.Channel(know_position)
+            channel.stop()
             return
 
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
-                cls.positions[position] = 0
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
+                cls.positions[i] = 0
                 channel.stop()
 
     @classmethod
     def is_plaing(cls, rnd_code, know_position):
         if know_position != -1:
-            return cls.channels[know_position].get_busy()
+            channel = pygame.mixer.Channel(know_position)
+            return not not channel.get_busy()
 
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
-                return channel.get_busy()
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
+                return not not channel.get_busy()
         return False
 
     @classmethod
     def pause(cls, rnd_code, know_position):
         if know_position != -1:
-            cls.channels[know_position].pause()
+            channel = pygame.mixer.Channel(know_position)
+            channel.pause()
             return
 
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
                 channel.pause()
 
     @classmethod
     def unpause(cls, rnd_code, know_position):
         if know_position != -1:
-            cls.channels[know_position].unpause()
+            channel = pygame.mixer.Channel(know_position)
+            channel.unpause()
             return
-
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
                 channel.unpause()
 
     @classmethod
     def fadeout(cls, rnd_code, time_ms, know_position):
         if know_position != -1:
-            cls.channels[know_position].fadeout(time_ms)
+            channel = pygame.mixer.Channel(know_position)
+            channel.fadeout(time_ms)
             return
 
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
                 channel.fadeout(time_ms)
 
     @classmethod
@@ -98,11 +107,13 @@ class SoundMixer:
         float_value = float(value) * 0.01
 
         if know_position != -1:
-            cls.channels[know_position].set_volume(float_value)
+            channel = pygame.mixer.Channel(know_position)
+            channel.set_volume(float_value)
             return
 
-        for position, channel in enumerate(cls.channels):
-            if cls.positions[position] == rnd_code:
+        for i in range(cls.max_channels):
+            channel = pygame.mixer.Channel(i)
+            if cls.positions[i] == rnd_code:
                 channel.set_volume(float_value)
 
 
