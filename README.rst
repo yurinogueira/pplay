@@ -13,7 +13,7 @@ Instalação
 
 ::
 
-   pip install pygame
+   pip install pplay-pygame
 
 Créditos
 -------
