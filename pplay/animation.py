@@ -3,7 +3,7 @@
 # Pygame and System Modules
 import time
 
-from gameimage import GameImage
+from pplay.gameimage import GameImage
 import pygame
 
 from pplay.window import Window
