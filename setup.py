@@ -13,7 +13,7 @@ def long_description():
 setup(
     name="pplay-pygame",
     packages=find_packages(include=["pplay"]),
-    version="2.1.2",
+    version="2.1.3",
     description="A simple game abstraction framework to pygame",
     long_description=long_description(),
     python_requires=">=3.7,",
