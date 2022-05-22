@@ -3,9 +3,9 @@
 # Pygame and System Modules
 import time
 
-from pplay.gameimage import GameImage
 import pygame
 
+from pplay.gameimage import GameImage
 from pplay.window import Window
 
 # Initializes pygame's modules
