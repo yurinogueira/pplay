@@ -24,18 +24,20 @@ class SoundMixer:
         SoundMixer.positions = [0 for _ in range(channels)]
 
     @classmethod
-    def play_sound(cls, sound_file, loop, rnd_code, know_position):
+    def play_sound(cls, sound, volume, loop, rnd_code, know_position):
         kwargs = {"loops": -1} if loop else {}
 
         if know_position != -1:
             cls.positions[know_position] = rnd_code
-            cls.channels[know_position].play(sound_file, **kwargs)
+            cls.channels[know_position].play(sound, **kwargs)
+            SoundMixer.set_volume(rnd_code, volume, know_position)
             return
 
         for position, channel in enumerate(cls.channels):
             if not channel.get_busy():
-                channel.play(sound_file, **kwargs)
+                channel.play(sound, **kwargs)
                 cls.positions[position] = rnd_code
+                SoundMixer.set_volume(rnd_code, volume, position)
 
     @classmethod
     def stop_sound(cls, rnd_code, know_position):
@@ -117,6 +119,7 @@ class Sound:
         self.rnd_code = randint(9, 99999999)
 
     def set_volume(self, value, know_position=1):
+        self.volume = value
         SoundMixer.set_volume(self.rnd_code, value, know_position)
 
     def increase_volume(self, value, know_position=-1):
@@ -136,7 +139,7 @@ class Sound:
 
     def play(self, know_position=-1):
         SoundMixer.play_sound(
-            self.sound, self.loop, self.rnd_code, know_position
+            self.sound, self.volume, self.loop, self.rnd_code, know_position
         )
 
     def stop(self, know_position=-1):
