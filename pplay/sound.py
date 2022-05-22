@@ -38,6 +38,7 @@ class SoundMixer:
                 channel.play(sound, **kwargs)
                 cls.positions[i] = rnd_code
                 cls.set_volume(rnd_code, volume, i)
+                return
 
     @classmethod
     def stop_sound(cls, rnd_code, know_position):
@@ -52,6 +53,7 @@ class SoundMixer:
             if cls.positions[i] == rnd_code:
                 cls.positions[i] = 0
                 channel.stop()
+                return
 
     @classmethod
     def is_plaing(cls, rnd_code, know_position):
@@ -76,6 +78,7 @@ class SoundMixer:
             channel = pygame.mixer.Channel(i)
             if cls.positions[i] == rnd_code:
                 channel.pause()
+                return
 
     @classmethod
     def unpause(cls, rnd_code, know_position):
@@ -83,10 +86,12 @@ class SoundMixer:
             channel = pygame.mixer.Channel(know_position)
             channel.unpause()
             return
+
         for i in range(cls.max_channels):
             channel = pygame.mixer.Channel(i)
             if cls.positions[i] == rnd_code:
                 channel.unpause()
+                return
 
     @classmethod
     def fadeout(cls, rnd_code, time_ms, know_position):
@@ -99,6 +104,7 @@ class SoundMixer:
             channel = pygame.mixer.Channel(i)
             if cls.positions[i] == rnd_code:
                 channel.fadeout(time_ms)
+                return
 
     @classmethod
     def set_volume(cls, rnd_code, value, know_position):
@@ -115,6 +121,7 @@ class SoundMixer:
             channel = pygame.mixer.Channel(i)
             if cls.positions[i] == rnd_code:
                 channel.set_volume(float_value)
+                return
 
 
 """Sound é uma classe de controle dos sons do jogo - efeitos, música"""
