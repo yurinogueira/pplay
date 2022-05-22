@@ -1,6 +1,6 @@
 # coding= utf-8
 
-from point import Point
+from pplay.point import Point
 import pygame
 
 # -*- coding: utf-8 -*-
