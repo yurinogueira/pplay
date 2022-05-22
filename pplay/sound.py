@@ -112,7 +112,7 @@ class Sound:
 
     def __init__(self, sound_file):
         self.loop = False
-        self.sound_file = sound_file
+        self.sound = pygame.mixer.Sound(sound_file)
         self.volume = 50
         self.rnd_code = randint(9, 99999999)
 
@@ -136,7 +136,7 @@ class Sound:
 
     def play(self, know_position=-1):
         SoundMixer.play_sound(
-            self.sound_file, self.loop, self.rnd_code, know_position
+            self.sound, self.loop, self.rnd_code, know_position
         )
 
     def stop(self, know_position=-1):
