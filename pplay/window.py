@@ -3,7 +3,7 @@
 # Pygame and system modules
 import sys
 
-from exceptions.window_exceptions import WindowNotInitialized
+from exceptions import WindowNotInitialized
 from keyboard import Keyboard
 from mouse import Mouse
 import pygame
