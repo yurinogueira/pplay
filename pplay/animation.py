@@ -69,9 +69,6 @@ class Animation(GameImage):
         self, initial_frame, final_frame, total_duration, loop=True
     ):
         self.set_sequence(initial_frame, final_frame, loop)
-        time_ms = int(
-            round(total_duration / float(final_frame - initial_frame + 1))
-        )
         for x in range(initial_frame, final_frame):
             self.frame_duration.append(total_duration)
 
@@ -80,7 +77,7 @@ class Animation(GameImage):
     def set_total_duration(self, time_ms):
         time_frame = float(time_ms) / self.total_frames
         self.total_duration = time_frame * self.total_frames
-        for x in range(0, self.total_frames):
+        for x in range(self.total_frames):
             self.frame_duration.append(time_frame)
 
     # -----------------------DRAW&UPDATE METHODS--------------------
@@ -122,6 +119,39 @@ class Animation(GameImage):
 
         # Blits the image with the rect and clip_rect clipped
         Window.get_screen().blit(self.image, self.rect, area=clip_rect)
+
+    def collided_perfect(self, target):
+        """
+        Both objects must extend a BaseRectObject,
+        since it has the pygame.mask and pygame.Rect
+        """
+        if not hasattr(target, "rect"):
+            return False
+
+        obj_rect = pygame.Rect(
+            self.curr_frame * self.width, 0, self.width, self.height
+        )
+        target_rect = (
+            pygame.Rect(
+                target.curr_frame * target.width,
+                0,
+                target.width,
+                target.height,
+            )
+            if hasattr(target, "curr_frame")
+            else target.rect
+        )
+
+        offset_x = target.rect.left - self.rect.left
+        offset_y = target.rect.top - self.rect.top
+
+        obj_image = self.image.subsurface(obj_rect)
+        target_image = target.image.subsurface(target_rect)
+
+        mask_1 = pygame.mask.from_surface(obj_image)
+        mask_2 = pygame.mask.from_surface(target_image)
+
+        return not not mask_1.overlap(mask_2, (offset_x, offset_y))
 
     # ----------------------PLAYING CONTROL METHODS----------------------
     """Stops execution and puts the initial frame as the current frame."""

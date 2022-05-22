@@ -55,7 +55,7 @@ class Collision:
         Both objects must extend a BaseRectObject,
         since it has the pygame.mask and pygame.Rect
         """
-        if not obj.rect or not target.rect:
+        if not hasattr(obj, "rect") or not hasattr(target, "rect"):
             return False
 
         offset_x = target.rect.left - obj.rect.left
