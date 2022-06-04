@@ -1,22 +1,42 @@
-# coding= utf-8
+"""Base Object Module
 
-"""The most basic game class"""
+Contains the most basics objects. BaseObject, an object that contains the
+position and size of the Object and the BaseRectObject, an object that
+contains the `rect` and `image` of the Object.
+"""
+
+from typing import Optional
+
+from pygame.rect import Rect
+from pygame.surface import Surface
 
 
 class BaseObject:
-    """Creates a BaseObject in X, Y co-ords, with Width x Height"""
+    """Handle the coords and size of an Object.
+
+    Attributes:
+        x: An integer indicating the x coord.
+        y: An integer indicating the y coord.
+        width: An integer indicating width of object.
+        height: An integer indicating height of object.
+    """
 
     def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.width = 0
-        self.height = 0
+        self.x: int = 0
+        self.y: int = 0
+        self.width: int = 0
+        self.height: int = 0
 
 
 class BaseRectObject(BaseObject):
-    """Creates a BaseRectObject in X, Y co-ords, with Width x Height"""
+    """Handle the `rect` and `image` of an Object.
+
+    Attributes:
+        rect: An `Rect` of the Object.
+        image: An `Surface` of the Object.
+    """
 
     def __init__(self):
         super(BaseRectObject, self).__init__()
-        self.rect = None
-        self.image = None
+        self.rect: Optional[Rect] = None
+        self.image: Optional[Surface] = None
