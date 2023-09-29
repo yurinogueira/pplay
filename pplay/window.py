@@ -164,6 +164,13 @@ class Window:
 
     # ----------------------TIME CONTROL METHODS--------------------------
 
+    """Pause the program for an amount of time - milliseconds"""
+    # Uses the processor to make delay accurate instead of
+    # pygame.time.wait that SLEEPS the proccess
+    @classmethod
+    def delay(cls, time_ms):
+        pygame.time.delay(time_ms)
+
     """
     Returns the time passed between
     the last and the current frame - SECONDS
@@ -177,6 +184,42 @@ class Window:
     def time_elapsed(self):
         return self.total_time
 
+
+    #------------------------DRAW METHODS-------------------------------
+    """
+    Draw a text on the screen at X and Y co-ords, using [R, G, B] color
+    [with the specified font,
+           [with the specified size,
+                   [Bold,
+                         [Italic]]]]
+    And returns the font and font surface created
+    """
+    def draw_text(self,
+                  text,
+                  x,
+                  y,
+                  size=12,
+                  color=(0,0,0),
+                  font_name="Arial",
+                  bold=False,
+                  italic=False):
+
+        # Creates a Font from the system fonts
+        # SysFont(name, size, bold=False, italic=False) -> Font
+        font = pygame.font.SysFont(font_name, size, bold, italic)
+
+        # Creates a pygame.Surface with the text rendered on it
+        # render(text, antialias, color, background=None)->Surface
+        font_surface = font.render(text, True, color)
+        # That's because pygame does NOT provide a way
+        # to directly draw text on an existing Surface.
+        # So you must use Font.render() -> Surface and BLIT
+        
+        # Finally! BLIT!
+        self.screen.blit(font_surface, [x, y])
+
+        return font, font_surface
+
     # ---------------------CLASS METHODS--------------------------
     """
     Closes the Window and stops the program - throws an exception
@@ -186,13 +229,6 @@ class Window:
     def close(cls):
         pygame.quit()
         sys.exit()
-
-    """Pause the program for an amount of time - milliseconds"""
-    # Uses the processor to make delay accurate instead of
-    # pygame.time.wait that SLEEPS the proccess
-    @classmethod
-    def delay(cls, time_ms):
-        pygame.time.delay(time_ms)
 
     @classmethod
     def get_screen(cls):
