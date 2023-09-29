@@ -184,8 +184,7 @@ class Window:
     def time_elapsed(self):
         return self.total_time
 
-
-    #------------------------DRAW METHODS-------------------------------
+    # ------------------------DRAW METHODS-------------------------------
     """
     Draw a text on the screen at X and Y co-ords, using [R, G, B] color
     [with the specified font,
@@ -194,15 +193,18 @@ class Window:
                          [Italic]]]]
     And returns the font and font surface created
     """
-    def draw_text(self,
-                  text,
-                  x,
-                  y,
-                  size=12,
-                  color=(0,0,0),
-                  font_name="Arial",
-                  bold=False,
-                  italic=False):
+
+    def draw_text(
+        self,
+        text,
+        x,
+        y,
+        size=12,
+        color=(0, 0, 0),
+        font_name="Arial",
+        bold=False,
+        italic=False,
+    ):
 
         # Creates a Font from the system fonts
         # SysFont(name, size, bold=False, italic=False) -> Font
@@ -214,7 +216,7 @@ class Window:
         # That's because pygame does NOT provide a way
         # to directly draw text on an existing Surface.
         # So you must use Font.render() -> Surface and BLIT
-        
+
         # Finally! BLIT!
         self.screen.blit(font_surface, [x, y])
 
