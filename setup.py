@@ -37,7 +37,7 @@ setup(
         "Tracker": "https://github.com/yurinogueira/pplay/issues",
     },
     license="GPL-2",
-    install_requires=["pygame>=2.1.3"],
+    install_requires=["pygame>=2.1.2"],
     setup_requires=["pytest-runner>=6.0.0"],
     tests_require=["pytest>=7.1.2"],
 )
