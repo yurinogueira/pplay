@@ -1,7 +1,8 @@
 # Pygame and system modules
 import pygame
-from pygame.locals import *
+from pygame import RLEACCEL
 
+from pplay.baseobject import BaseRectObject
 from pplay.collision import Collision
 from pplay.gameobject import GameObject
 from pplay.window import Window
@@ -28,7 +29,7 @@ def load_image(name, colorkey=None, alpha=False):
 """GameImage is the base class to deal with images"""
 
 
-class GameImage(GameObject):
+class GameImage(GameObject, BaseRectObject):
     """
     Creates a GameImage from the specified file.
     The width and height are obtained based on the image file.

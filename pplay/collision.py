@@ -2,6 +2,7 @@
 
 # Modules import
 import pygame
+from pygame import Rect
 
 from pplay.baseobject import BaseObject, BaseRectObject
 from pplay.point import Point
@@ -17,6 +18,12 @@ not only when over the same position of the edge.
 
 
 class Collision:
+    @classmethod
+    def get_perfect_rect(cls, obj: BaseRectObject) -> Rect:
+        if hasattr(obj, "curr_frame"):
+            return Rect(obj.curr_frame * obj.width, 0, obj.width, obj.height)
+        return obj.rect
+
     """
     minN: the Point of the top left of the N rect
     maxN: the Point of the bottom right of the N rect
@@ -58,11 +65,17 @@ class Collision:
         if not hasattr(obj, "rect") or not hasattr(target, "rect"):
             return False
 
-        offset_x = target.rect.left - obj.rect.left
-        offset_y = target.rect.top - obj.rect.top
+        obj_rect = cls.get_perfect_rect(obj)
+        target_rect = cls.get_perfect_rect(target)
 
-        mask_1 = pygame.mask.from_surface(obj.image)
-        mask_2 = pygame.mask.from_surface(target.image)
+        offset_x = target_rect.left - obj_rect.left
+        offset_y = target_rect.top - obj_rect.top
+
+        obj_image = obj.image.subsurface(obj_rect)
+        target_image = target.image.subsurface(target_rect)
+
+        mask_1 = pygame.mask.from_surface(obj_image)
+        mask_2 = pygame.mask.from_surface(target_image)
 
         return not not mask_1.overlap(mask_2, (offset_x, offset_y))
 
@@ -71,5 +84,5 @@ class Collision:
     """
 
     @classmethod
-    def collided_perfect(cls, gameimage1, gameimage2):
-        return Collision.perfect_collision(gameimage1, gameimage2)
+    def collided_perfect(cls, obj: BaseRectObject, target: BaseRectObject):
+        return Collision.perfect_collision(obj, target)

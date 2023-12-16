@@ -5,6 +5,8 @@ import time
 
 import pygame
 
+from pplay.baseobject import BaseRectObject
+from pplay.collision import Collision
 from pplay.gameimage import GameImage
 from pplay.window import Window
 
@@ -120,38 +122,8 @@ class Animation(GameImage):
         # Blits the image with the rect and clip_rect clipped
         Window.get_screen().blit(self.image, self.rect, area=clip_rect)
 
-    def collided_perfect(self, target):
-        """
-        Both objects must extend a BaseRectObject,
-        since it has the pygame.mask and pygame.Rect
-        """
-        if not hasattr(target, "rect"):
-            return False
-
-        obj_rect = pygame.Rect(
-            self.curr_frame * self.width, 0, self.width, self.height
-        )
-        target_rect = (
-            pygame.Rect(
-                target.curr_frame * target.width,
-                0,
-                target.width,
-                target.height,
-            )
-            if hasattr(target, "curr_frame")
-            else target.rect
-        )
-
-        offset_x = target.rect.left - self.rect.left
-        offset_y = target.rect.top - self.rect.top
-
-        obj_image = self.image.subsurface(obj_rect)
-        target_image = target.image.subsurface(target_rect)
-
-        mask_1 = pygame.mask.from_surface(obj_image)
-        mask_2 = pygame.mask.from_surface(target_image)
-
-        return not not mask_1.overlap(mask_2, (offset_x, offset_y))
+    def collided_perfect(self, target: BaseRectObject):
+        return Collision.perfect_collision(self, target)
 
     # ----------------------PLAYING CONTROL METHODS----------------------
     """Stops execution and puts the initial frame as the current frame."""
